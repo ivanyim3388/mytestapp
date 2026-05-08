@@ -28,22 +28,36 @@ import java.util.concurrent.TimeUnit;
  */
 public class DataHousekeeper {
 
+  private static final int DEFAULT_RETAIN_DAYS = 14;
+  private static final int DEFAULT_THREAD_COUNT = 4;
+
   private static final DateTimeFormatter LOG_TS =
       DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS").withZone(ZoneId.systemDefault());
 
   public static void main(String[] args) {
-    if (args == null || args.length != 2) {
-      System.err.println("Usage: java -jar data-housekeeper.jar <retainDays> <threadCount>");
-      System.err.println("Example: java -jar data-housekeeper.jar 30 8");
+    if (args == null) {
+      args = new String[0];
+    }
+    if (args.length > 2) {
+      System.err.println("Usage: java -jar data-housekeeper.jar [retainDays] [threadCount]");
+      System.err.println("Defaults: retainDays=" + DEFAULT_RETAIN_DAYS + ", threadCount=" + DEFAULT_THREAD_COUNT);
+      System.err.println("Examples:");
+      System.err.println("  java -jar data-housekeeper.jar");
+      System.err.println("  java -jar data-housekeeper.jar 30");
+      System.err.println("  java -jar data-housekeeper.jar 30 8");
       System.exit(2);
       return;
     }
 
-    final int retainDays;
-    final int threadCount;
+    int retainDays = DEFAULT_RETAIN_DAYS;
+    int threadCount = DEFAULT_THREAD_COUNT;
     try {
-      retainDays = Integer.parseInt(args[0]);
-      threadCount = Integer.parseInt(args[1]);
+      if (args.length >= 1) {
+        retainDays = Integer.parseInt(args[0]);
+      }
+      if (args.length == 2) {
+        threadCount = Integer.parseInt(args[1]);
+      }
     } catch (NumberFormatException e) {
       System.err.println("retainDays and threadCount must be integers.");
       System.exit(2);

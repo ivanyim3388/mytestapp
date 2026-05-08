@@ -13,12 +13,18 @@ mvn package
 ## Run
 
 ```bash
-java -jar target/data-housekeeper-1.0-SNAPSHOT.jar <retainDays> <threadCount>
+java -jar target/data-housekeeper-1.0-SNAPSHOT.jar [retainDays] [threadCount]
 ```
 
-Example:
+Defaults:
+- `retainDays=14`
+- `threadCount=4`
+
+Examples:
 
 ```bash
+java -jar target/data-housekeeper-1.0-SNAPSHOT.jar
+java -jar target/data-housekeeper-1.0-SNAPSHOT.jar 30
 java -jar target/data-housekeeper-1.0-SNAPSHOT.jar 30 8
 ```
 
